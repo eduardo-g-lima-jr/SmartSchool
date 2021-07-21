@@ -1,0 +1,79 @@
+<div class="row">
+
+  <div [ngClass]="{'col-sm-6': profSelecionado, 'col-sm-12': !profSelecionado}">
+    <app-titulo [titulo]="titulo"></app-titulo>
+    <br>
+    Selecione um professor:
+  
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Sobrenome</th>
+          <th scope="col">Telefone</th>
+          <th scope="col">Opções</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = 'let professor of professores'>
+          <th scope="row">{{professor.id}}</th>
+          <td>{{professor.nome}}</td>
+          <td>{{professor.sobrenome}}</td>
+          <td>{{professor.diciplina}}</td>
+          <td>
+            <div class="btn-group">
+              <button (click)="profSelect(professor)" class="btn btn-sm btn-outline-success">Visualizar</button>
+              <button (click)="openModal(template)" class="btn btn-sm btn-outline-primary">Alunos</button>
+              <button class="btn btn-sm btn-outline-danger">Desativar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-6" *ngIf='profSelecionado'>
+    <div class="row">
+      <div class="mr-auto">
+        <app-titulo [titulo]="'Professor: ' + profSelecionado.nome +' '+ profSelecionado.sobrenome"></app-titulo>
+      </div>
+      <div class="d-flex flex-row-reverse">
+        <button class="btn btn-outline-danger" (click)='voltar()'>Fechar</button>
+      </div>
+    </div>  
+  
+    <form [formGroup]="profForm" (submit)="profSubmit()">
+      <div class="form-group mt-4">
+        <label for="formGroupExempleInput">Codigo:</label>
+        <input type="text" formControlName="id" disabled=true class="form-control">
+      </div>
+      <div class="form-group mt-2">
+        <label for="formGroupExempleInput">Nome:</label>
+        <input type="text" formControlName="nome" class="form-control">
+      </div>
+      <div class="form-group mt-2">
+        <label for="formGroupExempleInput2">Sobrenome:</label>
+        <input type="text" formControlName="sobrenome" class="form-control">
+      </div>
+      <div class="form-group mt-2">
+        <label for="formGroupExempleInput2">Diciplina:</label>
+        <input type="text" formControlName="diciplina" class="form-control">
+      </div>      
+      <div class="form-group mt-2">        
+        <button class="btn btn-success" [disabled]="!profForm.valid">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-body">
+    <app-alunos></app-alunos>
+  </div>
+  <div class="div modal-footer">
+    <button type="button" class="btn pull-right" aria-label="Close" (click)="modalRef.hide()">
+      Fechar
+    </button>    
+  </div>
+</ng-template>
